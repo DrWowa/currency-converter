@@ -1,0 +1,27 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-merge-conflict
+      - id: check-toml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: file-contents-sorter
+        args: ["--ignore-case", "--unique"]
+        files: ^requirements.*$
+
+  - repo: local
+    hooks:
+      - id: ruff
+        name: "Ruff linter"
+        entry: ruff check --force-exclude --no-cache --fix
+        args: []
+        language: python
+        types_or: [python, pyi]
+
+      - id: ruff-format
+        name: "Ruff formatter"
+        entry: ruff format --force-exclude --no-cache
+        args: []
+        language: python
+        types_or: [python, pyi]

@@ -1,0 +1,47 @@
+[tool.pytest.ini_options]
+addopts = "--tb=short"
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "session"
+
+
+[tool.ruff]
+line-length = 99
+force-exclude = true
+extend-exclude = []
+
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+# annotations
+"ANN",
+# global usage
+"PLW0603",
+# back compat with python lower than 3.10
+"FA",
+# docstrings
+"D",
+# TODO"s
+"FIX",
+# conflict with ruff-formatter, look https://docs.astral.sh/ruff/formatter/#conflicting-lint-rules
+"W191", "E111", "E114", "E117", "D206", "D300", "Q000", "Q001", "Q002", "Q003", "COM812", "COM819", "ISC001", "ISC002",
+]
+flake8-quotes.inline-quotes = "single"
+pydocstyle.convention = "google"
+isort.known-local-folder = ["app"]
+
+
+[tool.ruff.lint.per-file-ignores]
+"test_*" = [
+# assert
+"S101",
+]
+
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
