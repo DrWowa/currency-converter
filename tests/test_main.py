@@ -37,7 +37,7 @@ def test_convert(from_symbol, to_symbol, amount, rates, expected):
     ),
 )
 @pytest.mark.usefixtures("redis_rates")
-async def test_root(client, data, expected):
+async def test_convert_route(client, data, expected):
     response = client.get("?".join(("/", urlencode(data))))
     assert response.status_code == HTTPStatus.OK
     data["converted_amount"] = expected
@@ -53,7 +53,7 @@ async def test_root(client, data, expected):
         {"from": "eur", "to": "usd"},  # no amount
     ),
 )
-async def test_root_fail_on_absent_input(client, data):
+async def test_convert_route_fail_on_absent_input(client, data):
     response = client.get(("?".join(("/", urlencode(data)))).strip("?"))
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
 
@@ -67,7 +67,7 @@ async def test_root_fail_on_absent_input(client, data):
     ),
 )
 @pytest.mark.usefixtures("redis_rates")
-async def test_root_fail_on_unsupported_symbols(client, data, expected):
+async def test_convert_route_fail_on_unsupported_symbols(client, data, expected):
     response = client.get(("?".join(("/", urlencode(data)))).strip("?"))
     assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
     assert response.json() == {"detail": f"Unsupported symbols: [{expected}]"}

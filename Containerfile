@@ -11,7 +11,8 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 ENV PATH="/home/user/.local/bin:${PATH}"
 
-COPY --chown=user:user ./requirements.lock ./
+COPY --chown=user:user requirements.lock ./
+COPY --chown=user:user .env ./
 RUN --mount=type=cache,target=/root/.cache pip install -r ./requirements.lock
 
 COPY --chown=user:user ./$PROJECT ./$PROJECT

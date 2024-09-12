@@ -11,5 +11,17 @@ def client():
 
 @pytest.fixture()
 async def redis_rates():
-    await cache.set_rates("USD", {"JPY": 1 / 150})
-    await cache.set_rates("EUR", {"JPY": 0.05})
+    async with cache.with_cache() as client:
+        await cache.set_rates(client, "USD", {"JPY": 1 / 150}, {"success": "true"})
+        await cache.set_rates(client, "EUR", {"JPY": 0.05}, {"success": "true"})
+        await cache.set_rates(client, "JPY", {"EUR": 1 / 0.05, "USD": 150}, {"success": "true"})
+
+
+@pytest.fixture(autouse=True)
+async def patch_get(monkeypatch):
+    from httpx import AsyncClient
+
+    async def _mock(*_, **__):
+        return None
+
+    monkeypatch.setattr(AsyncClient, "get", _mock)
