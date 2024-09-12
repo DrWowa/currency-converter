@@ -30,6 +30,8 @@ ignore = [
 flake8-quotes.inline-quotes = "single"
 pydocstyle.convention = "google"
 isort.known-local-folder = ["app"]
+flake8-pytest-style.parametrize-values-type = "tuple"
+flake8-pytest-style.parametrize-values-row-type = "tuple"
 
 
 [tool.ruff.lint.per-file-ignores]

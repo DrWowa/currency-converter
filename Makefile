@@ -13,7 +13,7 @@ install-pre-commit:
 	@pre-commit install && pre-commit install --hook-type commit-msg
 
 # running
-run:
+run: stop
 	sh containers.sh
 
 stop:
