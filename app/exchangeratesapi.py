@@ -18,4 +18,9 @@ async def get_latest_rates(symbol):
         urljoin(settings.exchangeratesapi.base_url, "latest"),
         params=params,
     )
-    return response.json()
+    data = response.json()
+    if data.get("success", None):
+        return data
+
+    return None
+    # TODO: errors logging
