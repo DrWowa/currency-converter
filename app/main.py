@@ -9,11 +9,6 @@ from app import cache
 app = FastAPI()
 
 
-@app.get("/ping")
-def pong():
-    return {"ping": "pong!"}
-
-
 class ConvertResult(BaseModel):
     from_symbol: str = Field(..., alias="from")
     to_symbol: str = Field(..., alias="to")
