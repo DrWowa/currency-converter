@@ -1,7 +1,7 @@
-from http import HTTPStatus
 from urllib.parse import urlencode
 
 import pytest
+from fastapi import status
 
 from app.main import convert
 
@@ -31,9 +31,9 @@ def test_convert(from_symbol, to_symbol, amount, rates, expected):
     ),
 )
 @pytest.mark.usefixtures("redis_rates")
-async def test_convert_route(client, data, expected):
-    response = client.get("?".join(("/", urlencode(data))))
-    assert response.status_code == HTTPStatus.OK
+async def test_convert_route(client, auth_headers, data, expected):
+    response = client.get("?".join(("/", urlencode(data))), headers=auth_headers)
+    assert response.status_code == status.HTTP_200_OK
     data["converted_amount"] = expected
     assert response.json() == data
 
@@ -47,9 +47,9 @@ async def test_convert_route(client, data, expected):
         {"from": "eur", "to": "usd"},  # no amount
     ),
 )
-async def test_convert_route_fail_on_absent_input(client, data):
-    response = client.get(("?".join(("/", urlencode(data)))).strip("?"))
-    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+async def test_convert_route_fail_on_absent_input(client, auth_headers, data):
+    response = client.get(("?".join(("/", urlencode(data)))).strip("?"), headers=auth_headers)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
 
 
 @pytest.mark.parametrize(
@@ -61,7 +61,7 @@ async def test_convert_route_fail_on_absent_input(client, data):
     ),
 )
 @pytest.mark.usefixtures("redis_rates")
-async def test_convert_route_fail_on_unsupported_symbols(client, data, expected):
-    response = client.get(("?".join(("/", urlencode(data)))).strip("?"))
-    assert response.status_code == HTTPStatus.UNPROCESSABLE_ENTITY
+async def test_convert_route_fail_on_unsupported_symbols(client, auth_headers, data, expected):
+    response = client.get(("?".join(("/", urlencode(data)))).strip("?"), headers=auth_headers)
+    assert response.status_code == status.HTTP_422_UNPROCESSABLE_ENTITY
     assert response.json() == {"detail": f"Unsupported symbols: [{expected}]"}

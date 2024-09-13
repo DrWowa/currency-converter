@@ -28,6 +28,8 @@ class ExchangeRatesAPI(BaseSettings):
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    api_key: str
+
     redis: Redis = Redis()
     exchangeratesapi: ExchangeRatesAPI = ExchangeRatesAPI()
 

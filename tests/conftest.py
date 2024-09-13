@@ -1,12 +1,17 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app import cache, main
+from app import cache, config, main
 
 
 @pytest.fixture()
 def client():
     return TestClient(main.app)
+
+
+@pytest.fixture()
+def auth_headers():
+    return {"X-API-KEY": config.settings.api_key}
 
 
 @pytest.fixture()
